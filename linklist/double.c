@@ -16,6 +16,8 @@ void display(struct node *root);
 int main()
 {
 	int choice;
+	int data,pos;
+	struct node *root = NULL;
 	do
 	{
 		printf("\n\
@@ -30,10 +32,19 @@ int main()
 		switch(choice)
 		{
 			case 1:
+				printf("\nEnter the data to insert : ");
+				scanf("%d",&data);
+				printf("\nEnter the position : ");
+				scanf("%d",&pos);
+				root = insert(data,pos,root);
 				break;
 			case 2:
+				printf("\nEnter the position to delete : ");
+				scanf("%d",&pos);
+				root = delete(pos,root);
 				break;
 			case 3:
+				display(root);
 				break;
 			case 4:
 				printf("\nBye\n");
@@ -56,6 +67,60 @@ struct node *get_node(int data)
 	newnode->next = NULL;
 	newnode->prev = NULL;
 	return newnode;
+}
+
+struct node *insert(int data,int pos,struct node *root)
+{
+	struct node *head=root,*temp=NULL,*newnode=NULL;
+	int n=1;
+	newnode = get_node(data);
+	if(root == NULL)
+	{
+		return newnode;
+	}
+	if(pos == 1)
+	{
+		root->prev = newnode;
+		newnode->next = root;
+		return newnode;
+	}	
+	else
+	{
+		for(n=1;n<pos-1 && head->next!=NULL;head = head->next, n++);
+		if(head->next == NULL)
+		{
+			newnode->prev = head;
+			head->next = newnode;
+		}
+		else
+		{
+			temp = head->next;
+			newnode->prev = head;
+			head->next = newnode;
+			newnode->next = temp;
+		}
+		return root;
+	}
+}
+
+struct node *delete(int pos,struct node *root)
+{
+	struct node *temp,*head = root,*prev = NULL,*next = NULL;
+	int n = 1;
+	while(n!=pos && head!=NULL)
+	{
+		n++;
+		head = head->next;
+	}
+	if(head == NULL)
+	{
+		printf("\nInvalid position\n");
+		exit(-1);
+	}
+	temp = head;
+	temp->prev->next = temp->next;
+	free(temp);
+	return root;
 }
 
 void display(struct node *root)
