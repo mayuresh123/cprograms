@@ -57,3 +57,14 @@ struct node *get_node(int data)
 	newnode->prev = NULL;
 	return newnode;
 }
+
+void display(struct node *root)
+{
+	printf("\n[");
+	while(root)
+	{
+		printf(" %d,",root->data);
+		root = root->next;
+	}
+	printf("\b ]\n");
+}
