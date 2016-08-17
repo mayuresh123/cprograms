@@ -43,3 +43,17 @@ int main()
 		}
 	}while(choice!=4);
 }
+
+struct node *get_node(int data)
+{
+	struct node *newnode = (struct node *) malloc (sizeof(struct node));
+	if(newnode == NULL)
+	{
+		printf("\nUnable to allocate memory\n");
+		exit(-1);
+	}
+	newnode->data = data;
+	newnode->next = NULL;
+	newnode->prev = NULL;
+	return newnode;
+}
