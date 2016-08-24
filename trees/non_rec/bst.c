@@ -1,11 +1,16 @@
 #include<stdio.h>
 #include<malloc.h>
 
+#define MAX 10
+
 struct node 
 {
 	int data;
 	struct node *left,*right;
 };
+
+struct node *arr[MAX];
+int top = -1;
 
 struct node *get_node(int data);
 struct node *insert(int data,struct node *root);
@@ -17,6 +22,10 @@ struct node *del_case_a(int data,struct node *root);
 struct node *del_case_b(int data,struct node *root);
 struct node *del_case_c(int dtat,struct node *root);
 
+void push(struct node *element);
+struct node *pop();
+int isEmpty();
+int isFull();
 
 int main()
 {
@@ -111,13 +120,32 @@ void preorder(struct node *root)
 
 void inorder(struct node *root)
 {
-	if(root == NULL)
+	struct node *element = root;
+	push(element);
+	while(element->left != NULL)
 	{
-		return;
+		element = element->left;
+		push(element);
 	}
-	inorder(root->left);
-	printf("%d ",root->data);
-	inorder(root->right);
+	while(isEmpty())
+	{
+		struct node *elem = pop();
+		printf("%d ",elem->data);
+		//if(elem->left != NULL)
+		//{
+		//	continue;
+		//}
+		if(elem->right!=NULL)
+		{
+			push(elem->right);
+			elem = elem->right;
+			while(elem->left!=NULL)
+			{
+				elem = elem->left;
+				push(elem);
+			}
+		}
+	}
 }
 
 void postorder(struct node *root)
@@ -131,9 +159,44 @@ void postorder(struct node *root)
 	printf("%d ",root->data);
 }
 
+void push(struct node *element)
+{
+	//printf("in push\n");
+	if(isFull())
+	{
+		arr[++top] = element;
+	}
+	//printf("Element pushed : %d",arr[top]->data);
+}
 
+struct node *pop()
+{
+	if(isEmpty())
+	{
+		struct node *temp = arr[top];
+		top--;
+		return temp;
+	}
 
+}
 
+int isFull()
+{
+	if(top > 9)
+	{
+		return 0;
+	}
+	return 1;
+}
+
+int isEmpty()
+{
+	if(top == -1)
+	{
+		return 0;
+	}
+	return 1;
+}
 
 
 
