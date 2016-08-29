@@ -109,17 +109,37 @@ struct node *delete(int data,struct node *root)
 
 void preorder(struct node *root)
 {
-	if(root == NULL)
+	top = -1;
+	struct node *element = root;
+	push(element);
+	printf("%d ",element->data);
+	while(element->left !=NULL)
 	{
-		return;
+		element = element->left;
+		push(element);
+		printf("%d ",element->data);
 	}
-	printf("%d ",root->data);
-	preorder(root->left);
-	preorder(root->right);
+	while(isEmpty())
+	{
+		struct node *elem = pop();
+		if(elem->right != NULL)
+		{
+			elem = elem->right;
+			push(elem);
+			printf("%d ",elem->data);
+			while(elem->left!=NULL)
+			{
+				elem = elem->left;
+				push(elem);
+				printf("%d ",elem->data);
+			}
+		}
+	}
 }
 
 void inorder(struct node *root)
 {
+	top = -1;
 	struct node *element = root;
 	push(element);
 	while(element->left != NULL)
@@ -131,10 +151,6 @@ void inorder(struct node *root)
 	{
 		struct node *elem = pop();
 		printf("%d ",elem->data);
-		//if(elem->left != NULL)
-		//{
-		//	continue;
-		//}
 		if(elem->right!=NULL)
 		{
 			push(elem->right);
@@ -150,13 +166,6 @@ void inorder(struct node *root)
 
 void postorder(struct node *root)
 {
-	if(root == NULL)
-	{
-		return;	
-	}
-	postorder(root->left);
-	postorder(root->right);
-	printf("%d ",root->data);
 }
 
 void push(struct node *element)
