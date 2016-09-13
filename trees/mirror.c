@@ -65,6 +65,10 @@ int main()
 			case 3:
 				{
 					bool isSubTree = check_subtree(tree1,tree2);
+					if(isSubTree)
+						printf("\nSubTree\n");
+					else
+						printf("\nNot a SubTree\n");
 				}
 				break;
 			case 4:
@@ -134,43 +138,58 @@ void display_mirror(NODE *tree1,NODE *tree2,NODE *root)
 	tree1==NULL?display_mirror(NULL,NULL,tree1):(display_mirror(tree1->left!=NULL?tree1->left:NULL,tree1->right!=NULL?tree1->right:NULL,tree1));
 }
 
-bool compare_tree(NODE *tree1,NODE *tree2)
+bool compare(NODE *tree1,NODE *tree2)
 {
-	static int flag = 0;
 	if(tree2 == NULL)
 	{
 		return true;
 	}
-	else if( tree1!=NULL && (tree1->data == tree2->data) )
+	if(tree1->data == tree2->data)
 	{
-		return compare_tree(tree1->right,tree2->right);
-		return compare_tree(tree1->left,tree2->left);
+		if(tree1->left!=NULL && tree1->right!=NULL)
+		{
+			return (compare(tree1->left,tree2->left) && compare(tree1->right,tree2->right));
+		}
+		else if(tree1->left == NULL)
+		{
+			return compare(tree1->right,tree2->right);
+		}
+		else if(tree1->right == NULL)
+		{
+			return compare(tree1->left,tree2->left);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	else
 	{
-		flag = 1;
+		return false;
 	}
-
-	return flag == 0?true:false;
-
 }
 
 bool check_subtree(NODE *tree1,NODE *tree2)
 {
+	if(tree2 == NULL)
+		return true;
 	while(tree1!=NULL)
 	{
-		if(tree1->data == tree2->data)
+		if(compare(tree1,tree2))
 		{
-			if( compare_tree(tree1->left,tree2->left) && compare_tree(tree1->right,tree2->right) )
-			{
-				return true;
-			}
+			return true;
 		}
 		else
 		{
-			check_subtree(tree1->left,tree2);
-			check_subtree(tree1->right,tree2);
+			if(tree1->left!=NULL)
+			{
+				check_subtree(tree1->left,tree2);
+			}
+			else if(tree1->right!=NULL)
+			{
+				check_subtree(tree1->right,tree2);
+			}	
 		}
 	}
-
+	return false;
 }
